@@ -2,8 +2,8 @@
 
 # Plan of action
 
-- Initialise NodeJS Project
-- Initialise first view
+- Initialise NodeJS Project //Done
+- Initialise first view //Done
 - Create a room id 
 - Add the ability to view my own Video
 - Add the ability to allow others to stream their video
