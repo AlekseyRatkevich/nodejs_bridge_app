@@ -1,0 +1,10 @@
+const express = require('express')
+const app = express()
+const server = require('http').Server(app)
+
+app.get('/', (request, response) => {
+    response.status(200).send('Hello world')
+})
+
+
+server.listen(3000)
