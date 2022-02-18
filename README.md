@@ -1,1 +1,1 @@
-# nodejs_bridge_app
+# Средство построения системы видеозвонков с использованием NodeJS, WebRTC, SocketIO
