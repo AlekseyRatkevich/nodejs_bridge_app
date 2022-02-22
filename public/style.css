@@ -27,7 +27,11 @@ video {
     flex-direction: column;
 }
 
-.main_right {
+.main__right {
+    display: flex;
+    flex-direction: column;
+    background-color: #242324;
+    border-left: 1px solid #3D3D42;
     flex: 0.2;
 }
 
@@ -72,4 +76,25 @@ video {
 
 .leave_meeting {
     color: #EB534B;
+}
+
+.main__header {
+    color: #f5f5f5;
+    text-align: center;
+}
+
+.main__chat_window {
+    flex-grow: 1;
+}
+
+.main__message_container {
+    display: flex;
+    padding: 25px 12px;
+}
+
+.main__message_container input {
+    flex-grow: 1;
+    background-color: transparent;
+    border: none;
+    color: #f5f5f5;
 }
