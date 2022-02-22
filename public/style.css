@@ -3,6 +3,10 @@ body {
     padding: 0;
 }
 
+*, ::after, ::before {
+    box-sizing: content-box;
+}
+
 #video-grid {
     display: flex;
     justify-content: center;
@@ -71,7 +75,7 @@ video {
 }
 
 .main__controls__button i {
-    font-size: 24px;
+    font-size: 23px;
 }
 
 .leave_meeting {
@@ -81,6 +85,7 @@ video {
 .main__header {
     color: #f5f5f5;
     text-align: center;
+    padding-top: 15px;
 }
 
 .main__chat_window {
@@ -103,4 +108,12 @@ video {
 .messages {
     color: #f5f5f5;
     list-style: none;
+}
+
+li {
+    padding: 2px;
+}
+
+.unmute, .stop {
+    color: #CC3B33;
 }

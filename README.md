@@ -7,7 +7,7 @@
 - Create a room id //Done
 - Add the ability to view my own Video //Done
 - Add the ability to allow others to stream their video //Done
-- Add styling
-- Add the ability to create messages
-- Add mute button
-- Add stop video button
+- Add styling //Done
+- Add the ability to create messages //Done
+- Add mute button //Done
+- Add stop video button //Done
