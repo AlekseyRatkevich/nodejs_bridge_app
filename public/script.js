@@ -44,7 +44,10 @@ navigator.mediaDevices
 
     socket.on('createMessage', (message) => {
       $('.messages').append(`<li class="message"><br>user</br>${message}</li>`)
+      scrollToBottom()
     })
+
+    // ----------------- Jquery -----------------
   })
 
 peer.on('open', (id) => {
@@ -66,3 +69,12 @@ const addVideoStream = (video, stream) => {
   })
   videoGrid.append(video)
 }
+
+// ----------------- Jquery -----------------
+
+const scrollToBottom = () => {
+    let d = $('.main__chat_window')
+    d.scrollTop(d.prop('scrollHeight'))
+}
+
+// ----------------- Jquery -----------------
