@@ -1,0 +1,17 @@
+
+body {
+    background-color: black;
+}
+
+#video-grid {
+    display: flex;
+    justify-content: center;
+}
+
+video {
+    transform: scale(-1, 1);
+    margin-top: 100px;
+    height: 300px;
+    width: 400px;
+    object-fit: cover;
+}
