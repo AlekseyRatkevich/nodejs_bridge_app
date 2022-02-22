@@ -19,16 +19,31 @@ navigator.mediaDevices
     myVideoStream = stream
     addVideoStream(myVideo, stream)
 
-    peer.on('call', call => {
-        call.answer(stream)
-        const video = document.createElement('video')
-        call.on('stream', userVideoStream => {
-            addVideoStream(video, userVideoStream)
-        })
+    peer.on('call', (call) => {
+      call.answer(stream)
+      const video = document.createElement('video')
+      call.on('stream', (userVideoStream) => {
+        addVideoStream(video, userVideoStream)
+      })
     })
 
     socket.on('user-connected', (userId) => {
       connectToNewUser(userId, stream)
+    })
+
+    // ----------------- Jquery -----------------
+
+    let text = $('input')
+
+    $('html').keydown((e) => {
+      if (e.which == 13 && text.val().length !== 0) {
+        socket.emit('message', text.val())
+        text.val('')
+      }
+    })
+
+    socket.on('createMessage', (message) => {
+      $('.messages').append(`<li class="message"><br>user</br>${message}</li>`)
     })
   })
 
@@ -51,16 +66,3 @@ const addVideoStream = (video, stream) => {
   })
   videoGrid.append(video)
 }
-
-// ----------------- Jquery -----------------
-
-let text = $('input')
-
-$('html').keydown((e) => {
-    if (e.which == 13 && text.val().length !== 0) {
-        console.log(text.val())
-        socket.emit('message', text.val())
-        text.val('')
-    }
-})
-
