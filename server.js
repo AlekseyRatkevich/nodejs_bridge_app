@@ -15,6 +15,7 @@ app.use(express.static('public'))
 
 app.set('view engine', 'ejs')
 
+app.use('/peerjs', peerServer)
 app.get('/', (request, response) => {
     response.redirect(`/${uuidv4()}`)
 })
@@ -24,9 +25,9 @@ app.get('/:room', (request, response) => {
 })
 
 io.on('connection', socket => {
-    socket.on('join-room', (roomId) => {
+    socket.on('join-room', (roomId, userId) => {
         socket.join(roomId)
-        socket.to(roomId).emit("user-connected")
+        socket.to(roomId).emit('user-connected', userId)
     })
 })
 
