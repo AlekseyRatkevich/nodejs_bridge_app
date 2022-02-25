@@ -1,6 +1,7 @@
 body {
     margin: 0;
     padding: 0;
+    background-color: black;
 }
 
 *, ::after, ::before {
@@ -13,8 +14,8 @@ body {
 }
 
 video {
+    border-radius: 5px;
     transform: scale(-1, 1);
-    margin-top: 100px;
     height: 300px;
     width: 400px;
     object-fit: cover;
@@ -33,11 +34,20 @@ video {
 
 .main__right {
     display: flex;
+    flex: 0.2;
     flex-direction: column;
     background-color: #242324;
     border-left: 1px solid #3D3D42;
-    flex: 0.2;
     overflow-wrap: anywhere;
+}
+
+.hide_chat {
+    visibility: hidden;
+    display: none;
+}
+
+.hiden_chat {
+    flex: 2;
 }
 
 .main__videos {

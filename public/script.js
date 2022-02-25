@@ -43,7 +43,7 @@ navigator.mediaDevices
     })
 
     socket.on('createMessage', (message) => {
-      $('.messages').append(`<li class="message"><br>user</br>${message}</li>`)
+      $('.messages').append(`<li class="message"><br>User</br>${message}</li>`)
       scrollToBottom()
     })
 
@@ -137,3 +137,14 @@ setStopVideo = () => {
     `
   document.querySelector('.main__video_button').innerHTML = html
 }
+
+// Hide and show chat 
+
+const chatButton = document.querySelector('.main__chat_button')
+const chat = document.querySelector('.main__right')
+const left = document.querySelector('.main__left')
+
+chatButton.addEventListener('click', () => {
+  left.classList.toggle('hiden_chat')
+  chat.classList.toggle('hide_chat')
+})
