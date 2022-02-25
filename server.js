@@ -2,6 +2,10 @@ const express = require('express')
 const { request } = require('http')
 const app = express()
 const server = require('http').Server(app)
+// const PORT = process.env.PORT || 3000
+const PORT = 3030
+server.listen(PORT)
+
 
 
 const { ExpressPeerServer } = require ('peer')
@@ -35,4 +39,4 @@ io.on('connection', socket => {
     })
 })
 
-server.listen(process.env.PORT||3000)
+// server.listen(PORT)
