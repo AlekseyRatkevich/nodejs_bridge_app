@@ -11,6 +11,8 @@ body {
 #video-grid {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1500px;
 }
 
 video {
@@ -130,4 +132,16 @@ li {
 
 .unmute, .stop {
     color: #CC3B33;
+}
+
+user {
+    text-align: center;
+    margin-right: 5px;
+    color: #00cbe6;
+}
+
+/* Media querries  */
+
+@media screen and (max-width: 375px) {
+
 }

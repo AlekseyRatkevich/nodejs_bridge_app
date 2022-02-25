@@ -43,7 +43,7 @@ navigator.mediaDevices
     })
 
     socket.on('createMessage', (message) => {
-      $('.messages').append(`<li class="message"><br>User</br>${message}</li>`)
+      $('.messages').append(`<li class="message"><user>user:</user>${message}</li>`)
       scrollToBottom()
     })
 

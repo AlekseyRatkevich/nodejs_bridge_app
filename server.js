@@ -6,8 +6,6 @@ const server = require('http').Server(app)
 const PORT = 3030
 server.listen(PORT)
 
-
-
 const { ExpressPeerServer } = require ('peer')
 const peerServer = ExpressPeerServer(server, {
     debug: true
