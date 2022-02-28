@@ -28,7 +28,7 @@ navigator.mediaDevices.getUserMedia({
     connectToNewUser(userId, stream)
   })
   // input value
-  let text = $("input");
+  let text = $("#chat_message");
   // when press enter send message
   $('html').keydown(function (e) {
     if (e.which == 13 && text.val().length !== 0) {
@@ -140,4 +140,33 @@ const left = document.querySelector('.main__left')
 chatButton.addEventListener('click', () => {
   left.classList.toggle('hiden_chat')
   chat.classList.toggle('hide_chat')
+})
+
+//Change theme
+
+const main_theme_button = document.querySelector('.main_theme_button')
+const body = document.body
+
+function toogleThemeBtn() {
+  if (body.classList.contains('light')) {
+    main_theme_button.innerHTML = `
+    <i class="fa-solid fa-sun"></i>
+    <span>Night Theme</span>
+    `
+  } else {
+    main_theme_button.innerHTML = `
+    <i class="fa-solid fa-moon"></i>
+    <span>Light Theme</span>
+    `
+  }
+}
+
+if(!localStorage.theme) localStorage.theme = 'dark'
+body.className = localStorage.theme
+toogleThemeBtn()
+
+main_theme_button.addEventListener('click', () => {
+  body.classList.toggle('light')
+  toogleThemeBtn()
+  localStorage.theme = body.className || 'dark'
 })

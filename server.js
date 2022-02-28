@@ -7,6 +7,7 @@ const peerServer = ExpressPeerServer(server, {
   debug: true
 });
 const { v4: uuidV4 } = require('uuid')
+const PORT = process.env.PORT||3030
 
 app.use('/peerjs', peerServer);
 
@@ -37,4 +38,4 @@ io.on('connection', socket => {
   })
 })
 
-server.listen(process.env.PORT||3030)
+server.listen(PORT)
