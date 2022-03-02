@@ -1,4 +1,6 @@
 const express = require('express')
+const path = require('path');
+const favicon = require('serve-favicon')
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
@@ -9,7 +11,8 @@ const peerServer = ExpressPeerServer(server, {
 const { v4: uuidV4 } = require('uuid')
 const PORT = process.env.PORT||3030
 
-app.use('/peerjs', peerServer);
+app.use('/peerjs', peerServer)
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
