@@ -7,6 +7,7 @@
     --var-main-controls-hover: #343434;
     --var-main-right-border: #343434;
     --var-main-user-fc: #00cbe6;
+    --var-main-chat-ifno-fc: #a1a1a1;
 }
 
 body {
@@ -26,6 +27,7 @@ body {
     justify-content: center;
     flex-wrap: wrap;
     max-width: 1500px;
+    max-height: 600px;
 }
 
 video {
@@ -73,6 +75,7 @@ video {
     background-color: var(--var-main-videos-bg);
     justify-content: center;
     align-items: center;
+    overflow-y: scroll;
 }
 
 .main__controls {
@@ -141,6 +144,10 @@ video {
     list-style: none;
 }
 
+.info {
+    color: var(--var-main-chat-ifno-fc);
+}
+
 li {
     display: flex;
     flex-wrap: wrap;
@@ -177,9 +184,12 @@ input[type=checkbox] {
     --var-main-right-bg: #f0efef;
     --var-main-right-border: #e2e2e2;
     --var-main-user-fc: #00bd19;
+    --var-main-chat-ifno-fc: #8b8b8b;
 }
 
 
 /* Media querries  */
 
-@media screen and (max-width: 375px) {}
+@media screen and (max-width: 480px) {
+    
+}
