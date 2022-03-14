@@ -35,6 +35,7 @@ video {
     height: 300px;
     width: 400px;
     object-fit: cover;
+    transition: 0.5s;
 }
 
 .main {
@@ -187,6 +188,18 @@ input[type=checkbox] {
     --var-main-chat-ifno-fc: #8b8b8b;
 }
 
+.main__fullcsreen-button {
+    color: var(--var-main-header-fc);
+    cursor: pointer;
+    font-size: 28px;
+    margin-top: 270px;
+    margin-left: 5px;
+    transition: 0.5s;
+}
+
+.main__fullcsreen-button:hover {
+    color: var(--var-main-chat-ifno-fc);
+}
 
 /* Media querries  */
 

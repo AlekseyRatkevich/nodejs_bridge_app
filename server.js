@@ -25,23 +25,23 @@ app.get('/:room', (req, res) => {
   res.render('room', { roomId: req.params.room })
 })
 
-const users = {}
+const users = []
 
-io.on('connection', socket => {
+io.on('connection', (socket) => {
   socket.on('join-room', (roomId, userId) => {
-    // socket.on('custom-event', username => {
-    //   console.log(username)
-    // })
-    socket.join(roomId)
-    socket.to(roomId).emit('user-connected', userId)
-    // messages
-    socket.on('message', (message) => {
-      //send message to the same room
-      io.to(roomId).emit('createMessage', message, userId)
-    })
-
-    socket.on('disconnect', () => {
-      socket.to(roomId).emit('user-disconnected', userId)
+    socket.on('username', (username) => {
+      socket.emit('username-back', username)
+      users.push(username)
+      socket.join(roomId)
+      socket.to(roomId).emit('user-connected', userId, username)
+      // messages
+      socket.on('message', (message) => {
+        //send message to the same room
+        io.to(roomId).emit('createMessage', message, username)
+      })
+      socket.on('disconnect', () => {
+        socket.to(roomId).emit('user-disconnected', userId, username)
+      })
     })
   })
 })

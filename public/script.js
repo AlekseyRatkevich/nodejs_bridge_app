@@ -27,16 +27,21 @@ navigator.mediaDevices
       })
     })
 
-    // Set username
+    myVideo.addEventListener('play', () => {
+      console.log('hello')
+    })
 
-    // const username = prompt('Please, write your username')
-    $('.messages').append(`<li class="message info">You are connected</li>`)
-    // socket.emit('custom-event', username)
+    const username = prompt('Please, write your username')
+    // createFullscreen()
 
-    socket.on('user-connected', (userId) => {
+    socket.emit('username', username)
+    socket.on('username-back', (username) => {
+      $('.messages').append(`<li class="message info">You are connected</li>`)
+    })
+    socket.on('user-connected', (userId, username) => {
       connectToNewUser(userId, stream)
       $('.messages').append(
-        `<li class="message info"><user>${userId}</user>Has been connected succesfully</li>`
+        `<li class="message info"><user>${username}</user>Has been connected</li>`
       )
     })
     // input value
@@ -48,28 +53,68 @@ navigator.mediaDevices
         text.val('')
       }
     })
-    socket.on('createMessage', (message, userId) => {
+    socket.on('createMessage', (message, username) => {
       $('.messages').append(
-        `<li class="message"><user>${userId}</user>${message}</li>`
+        `<li class="message"><user>${username}</user>${message}</li>`
       )
       scrollToBottom()
     })
   })
 
-const peers = {}
-socket.on('user-disconnected', (userId) => {
-  if (peers[userId]) peers[userId].close()
-  $('.messages').append(
-    `<li class="message info"><user>${userId}</user>Has been disconnected</li>`
-  )
-})
+//Fullscreen
 
-const leaveMeeting = () => {
-}
+// function createFullscreen() {
+//   const mainVideos = document.querySelector('.main__videos')
+//   const fullScreenButton = document.createElement('div')
+//   fullScreenButton.className = 'main__fullcsreen-button'
+//   const fullScreenIcon = `<i class="fa-solid fa-expand"></i>`
+//   fullScreenButton.innerHTML = fullScreenIcon
+//   mainVideos.append(fullScreenButton)
+
+//   fullScreenButton.addEventListener('click', () => {
+//     const compressBtn = `
+//     <i class="fa-solid fa-compress"></i>
+//     `
+//     const fullscreenBtn = `
+//     <i class="fa-solid fa-expand"></i>
+//     `
+//     if (myVideo.style.width == '720px') {
+//       myVideo.style.width = '400px'
+//       myVideo.style.height = '300px'
+//       fullScreenButton.style.marginTop = '270px'
+//       fullScreenButton.innerHTML = fullscreenBtn
+//     } else {
+//       myVideo.style.width = '720px'
+//       myVideo.style.height = '600px'
+//       fullScreenButton.style.marginTop = '570px'
+//       fullScreenButton.innerHTML = compressBtn
+//     }
+//   })
+// }
 
 myPeer.on('open', (id) => {
   socket.emit('join-room', ROOM_ID, id)
 })
+
+const peers = {}
+socket.on('user-disconnected', (userId, username) => {
+  if (peers[userId]) peers[userId].close()
+  $('.messages').append(
+    `<li class="message info"><user>${username}</user>Has been disconnected</li>`
+  )
+})
+
+const leaveMeeting = () => {
+  const video = document.querySelector('video')
+  const mediaStream = video.srcObject
+  const tracks = mediaStream.getTracks()
+  tracks[0].stop()
+  tracks.forEach((track) => track.stop())
+  window.close()
+  setStopVideo()
+  setMuteButton()
+  $('.messages').append(`<li class="message info">You left the meeting</li>`)
+}
 
 function connectToNewUser(userId, stream) {
   const call = myPeer.call(userId, stream)
@@ -151,7 +196,6 @@ const setPlayVideo = () => {
   document.querySelector('.main__video_button').innerHTML = html
 }
 
-
 // Hide and show chat
 
 const chatButton = document.querySelector('.main__chat_button')
@@ -193,4 +237,3 @@ main_theme_button.addEventListener('click', () => {
   toogleThemeBtn()
   localStorage.theme = body.className || 'dark'
 })
-
