@@ -27,22 +27,24 @@ navigator.mediaDevices
       })
     })
 
-    myVideo.addEventListener('play', () => {
-      console.log('hello')
-    })
-
     const username = prompt('Please, write your username')
     // createFullscreen()
 
     socket.emit('username', username)
-    socket.on('username-back', (username) => {
+    socket.on('username-back', (username, users) => {
       $('.messages').append(`<li class="message info">You are connected</li>`)
+      scrollToBottom()
+      users.map(user => {
+        const name = participant.innerHTML = user
+        participantsWindow.append(name)
+      })
     })
     socket.on('user-connected', (userId, username) => {
       connectToNewUser(userId, stream)
       $('.messages').append(
         `<li class="message info"><user>${username}</user>Has been connected</li>`
       )
+      scrollToBottom()
     })
     // input value
     let text = $('#chat_message')
@@ -51,6 +53,7 @@ navigator.mediaDevices
       if (e.which == 13 && text.val().length !== 0) {
         socket.emit('message', text.val())
         text.val('')
+        picker.hidePicker()
       }
     })
     socket.on('createMessage', (message, username) => {
@@ -114,6 +117,7 @@ const leaveMeeting = () => {
   setStopVideo()
   setMuteButton()
   $('.messages').append(`<li class="message info">You left the meeting</li>`)
+  scrollToBottom()
 }
 
 function connectToNewUser(userId, stream) {
@@ -188,7 +192,7 @@ const setStopVideo = () => {
   document.querySelector('.main__video_button').innerHTML = html
 }
 
-const setPlayVideo = () => {
+const setPlayVideo = () => { 
   const html = `
   <i class="stop fas fa-video-slash"></i>
     <span>Play Video</span>
@@ -237,3 +241,41 @@ main_theme_button.addEventListener('click', () => {
   toogleThemeBtn()
   localStorage.theme = body.className || 'dark'
 })
+
+// Participants 
+
+const participantsBtn = document.querySelector('.main__participants_button')
+const participantsWindow = document.querySelector('.main__participants_popup_container')
+const participant = document.createElement('p')
+
+participantsBtn.addEventListener('click', openClosePopUp)
+openClosePopUp()
+
+function openClosePopUp() {
+  if (participantsWindow.style.left == '-250px') {
+    participantsWindow.style.left = '0px'
+  } else {
+    participantsWindow.style.left = '-250px'
+  }
+}
+
+// Emoji
+
+// import { EmojiButton } from "@joeattardi/emoji-button"
+
+const input = document.getElementById('chat_message')
+const emojiBtn = document.querySelector('.main__message_emoji_btn')
+    let picker = new EmojiButton({
+    position : 'top',
+    autoHide: false,
+    showVariants: false,
+    })
+
+    picker.on('emoji', function(emoji){
+        input.value += emoji
+        input.focus()
+    })
+
+    emojiBtn.addEventListener('click', function(){
+        picker.pickerVisible ? picker.hidePicker() : picker.showPicker(input)
+    })

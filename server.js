@@ -30,8 +30,8 @@ const users = []
 io.on('connection', (socket) => {
   socket.on('join-room', (roomId, userId) => {
     socket.on('username', (username) => {
-      socket.emit('username-back', username)
-      users.push(username)
+      socket.emit('username-back', username, users)
+      // users.push(username)
       socket.join(roomId)
       socket.to(roomId).emit('user-connected', userId, username)
       // messages

@@ -11,6 +11,7 @@
 }
 
 body {
+    overflow: hidden;
     margin: 0;
     padding: 0;
     background-color: var(--var-main-videos-bg);
@@ -57,7 +58,7 @@ video {
     background-color: var(--var-main-right-bg);
     border-left: 1px solid var(--var-main-right-border);
     overflow-wrap: anywhere;
-
+    transition: 0.2s;
 }
 
 .hide_chat {
@@ -74,6 +75,7 @@ video {
     display: flex;
     flex-grow: 1;
     background-color: var(--var-main-videos-bg);
+    transition: 0.2s;
     justify-content: center;
     align-items: center;
     overflow-y: scroll;
@@ -85,6 +87,7 @@ video {
     color: var(--var-main-controls-fc);
     padding: 5px;
     justify-content: space-between;
+    transition: 0.2s;
 }
 
 .main__controls__block {
@@ -133,6 +136,7 @@ video {
 
 .main__message_container input {
     flex-grow: 1;
+    padding: 5px 10px 5px 10px;
     background-color: transparent;
     border: none;
     color: var(--var-main-header-fc);
@@ -140,7 +144,7 @@ video {
 
 .messages {
     padding: 20px 20px 0 20px;
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: var(--var-main-header-fc);
     list-style: none;
 }
@@ -205,4 +209,39 @@ input[type=checkbox] {
 
 @media screen and (max-width: 480px) {
     
+}
+
+/* Participants */
+
+.main__participants_popup_container {
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    word-wrap: break-word;
+    background-color: var(--var-main-controls-bg);
+    color: var(--var-main-controls-fc);
+    border-top: var(--var-main-right-border) 1px solid;
+    /* border-left: var(--var-main-right-border) 1px solid; */
+    border-right: var(--var-main-right-border) 1px solid;
+    border-radius: 5px 5px 0px 0px;
+    height: 300px;
+    width: 180px;
+    position: absolute;
+    left: -250px;
+    bottom: 70px;
+    transition: 0.2s;
+}
+
+.main__message_emoji_btn {
+    cursor: pointer;
+    color: var(--var-main-header-fc);
+    font-size: 25px;
+    margin-left: 12px;
+    transition: 0.1s;
+}
+
+.main__message_emoji_btn:hover {
+    color: var(--var-main-controls-fc);
 }
