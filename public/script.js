@@ -27,23 +27,25 @@ navigator.mediaDevices
       })
     })
 
-    const username = prompt('Please, write your username')
+    const username = prompt('Please, write your username', 'User')
+
     // createFullscreen()
 
     socket.emit('username', username)
     socket.on('username-back', (username, users) => {
       $('.messages').append(`<li class="message info">You are connected</li>`)
-      scrollToBottom()
-      users.map(user => {
-        const name = participant.innerHTML = user
-        participantsWindow.append(name)
+      users.forEach(user => {
+        const name = user.username
+        $('.main__participants_list').append(`<li>${name}</li>`)
       })
+      scrollToBottom()
     })
     socket.on('user-connected', (userId, username) => {
       connectToNewUser(userId, stream)
       $('.messages').append(
         `<li class="message info"><user>${username}</user>Has been connected</li>`
-      )
+      ) 
+      $('.main__participants_list').append(`<li>${username}</li>`)
       scrollToBottom()
     })
     // input value
@@ -100,11 +102,18 @@ myPeer.on('open', (id) => {
 })
 
 const peers = {}
-socket.on('user-disconnected', (userId, username) => {
+socket.on('user-disconnected', (userId, username, users) => {
   if (peers[userId]) peers[userId].close()
   $('.messages').append(
     `<li class="message info"><user>${username}</user>Has been disconnected</li>`
   )
+  // $('.main__participants_popup_container').textContent = ''
+  participantsList.innerHTML = ''
+  console.log(users)
+  users.forEach(user => {
+    const name = user.username
+    $('.main__participants_list').append(`<li>${name}</li>`)
+  })
 })
 
 const leaveMeeting = () => {
@@ -145,6 +154,8 @@ const scrollToBottom = () => {
   var d = $('.main__chat_window')
   d.scrollTop(d.prop('scrollHeight'))
 }
+
+// Mute/Unmute and play/stop video buttons
 
 const muteUnmute = () => {
   const enabled = myVideoStream.getAudioTracks()[0].enabled
@@ -213,7 +224,7 @@ function hideShowChat() {
   chat.classList.toggle('hide_chat')
 }
 
-//Change theme
+// Change theme
 
 const main_theme_button = document.querySelector('.main_theme_button')
 const body = document.body
@@ -246,7 +257,8 @@ main_theme_button.addEventListener('click', () => {
 
 const participantsBtn = document.querySelector('.main__participants_button')
 const participantsWindow = document.querySelector('.main__participants_popup_container')
-const participant = document.createElement('p')
+const participantsList = document.querySelector('.main__participants_list')
+participantsList.style.listStyleType = 'decimal'
 
 participantsBtn.addEventListener('click', openClosePopUp)
 openClosePopUp()
@@ -259,16 +271,14 @@ function openClosePopUp() {
   }
 }
 
-// Emoji
 
-// import { EmojiButton } from "@joeattardi/emoji-button"
+// Emoji
 
 const input = document.getElementById('chat_message')
 const emojiBtn = document.querySelector('.main__message_emoji_btn')
     let picker = new EmojiButton({
     position : 'top',
     autoHide: false,
-    showVariants: false,
     })
 
     picker.on('emoji', function(emoji){

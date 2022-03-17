@@ -153,11 +153,6 @@ video {
     color: var(--var-main-chat-ifno-fc);
 }
 
-li {
-    display: flex;
-    flex-wrap: wrap;
-}
-
 .unmute,
 .stop {
     color: #CC3B33;
@@ -223,7 +218,6 @@ input[type=checkbox] {
     background-color: var(--var-main-controls-bg);
     color: var(--var-main-controls-fc);
     border-top: var(--var-main-right-border) 1px solid;
-    /* border-left: var(--var-main-right-border) 1px solid; */
     border-right: var(--var-main-right-border) 1px solid;
     border-radius: 5px 5px 0px 0px;
     height: 300px;
@@ -237,11 +231,25 @@ input[type=checkbox] {
 .main__message_emoji_btn {
     cursor: pointer;
     color: var(--var-main-header-fc);
-    font-size: 25px;
-    margin-left: 12px;
+    font-size: 23px;
     transition: 0.1s;
+    margin-top: 5px;
+    margin-left: 10px;
 }
 
 .main__message_emoji_btn:hover {
+    color: var(--var-main-controls-fc);
+}
+
+.main__message_clip {
+    cursor: pointer;
+    color: var(--var-main-header-fc);
+    font-size: 23px;
+    transition: 0.1s;
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+.main__message_clip:hover {
     color: var(--var-main-controls-fc);
 }
