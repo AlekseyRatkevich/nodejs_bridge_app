@@ -8,6 +8,7 @@
     --var-main-right-border: #343434;
     --var-main-user-fc: #00cbe6;
     --var-main-chat-ifno-fc: #a1a1a1;
+    --var-main-notify-bg: rgba(104, 255, 124, 0.377);
 }
 
 body {
@@ -186,6 +187,7 @@ input[type=checkbox] {
     --var-main-right-border: #e2e2e2;
     --var-main-user-fc: #00bd19;
     --var-main-chat-ifno-fc: #8b8b8b;
+    --var-main-notify-bg: rgba(73, 255, 97, 0.582);
 }
 
 .main__fullcsreen-button {
@@ -255,9 +257,9 @@ input[type=checkbox] {
     width: 100%;
     height: 0;
     box-sizing: border-box;
-    color: white;
+    color: var(--var-main-controls-fc);
     text-align: center;
-    background: rgba(147, 255, 161, 0.377);
+    background: var(--var-main-notify-bg);
     overflow: hidden;
     box-sizing: border-box;
     transition: height .2s;
