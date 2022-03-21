@@ -27,7 +27,9 @@
         <div class="main__left">
 
             <div class="main__videos">
-                <div id="video-grid"></div>
+                <div id="video-grid">
+                    <div class="notify"><span id="notifyType"></span></div>
+                </div>
                 <div class="main__participants_popup_container">
                     <ul class="main__participants_list">
                     </ul>
@@ -46,6 +48,11 @@
                     <div class="main__controls__button main_theme_button">
                         <i class="fa-solid fa-moon"></i>
                         <span>Light Theme</span>
+                    </div>
+
+                    <div onclick="copyToClipboard()" class="main__controls__button main__share_button">
+                        <i class="fa-solid fa-share"></i>
+                        <span>Share Link</span>
                     </div>
 
                 </div>
@@ -75,6 +82,7 @@
                         <span class="leave_meeting">Leave Meeting</span>
                     </div>
                 </div>
+
 
             </div>
 

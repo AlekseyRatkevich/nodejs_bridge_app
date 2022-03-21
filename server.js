@@ -9,7 +9,6 @@ const peerServer = ExpressPeerServer(server, {
   debug: true,
 })
 const { v4: uuidV4 } = require('uuid')
-const PORT = process.env.PORT || 3030
 
 app.use('/peerjs', peerServer)
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
@@ -45,6 +44,7 @@ io.on('connection', (socket) => {
         io.to(roomId).emit('createMessage', message, username)
       })
       socket.on('disconnect', () => {
+        socket.to(roomId).emit('user-disconnected', userId, username, users)
         for (let index = 0; index < users.length; index++) {
           const element = users[index]
           if (element.userId === userId) {
@@ -52,11 +52,11 @@ io.on('connection', (socket) => {
             break
           }
         }
-        socket.to(roomId).emit('user-disconnected', userId, username, users)
-        console.log(users)
       })
     })
   })
 })
+
+const PORT = process.env.PORT || 3030
 
 server.listen(PORT)

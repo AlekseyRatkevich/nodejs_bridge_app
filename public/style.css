@@ -59,6 +59,7 @@ video {
     border-left: 1px solid var(--var-main-right-border);
     overflow-wrap: anywhere;
     transition: 0.2s;
+    z-index: 2;
 }
 
 .hide_chat {
@@ -202,9 +203,7 @@ input[type=checkbox] {
 
 /* Media querries  */
 
-@media screen and (max-width: 480px) {
-    
-}
+@media screen and (max-width: 480px) {}
 
 /* Participants */
 
@@ -250,6 +249,29 @@ input[type=checkbox] {
     margin-right: 10px;
 }
 
-.main__message_clip:hover {
-    color: var(--var-main-controls-fc);
+.notify {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 0;
+    box-sizing: border-box;
+    color: white;
+    text-align: center;
+    background: rgba(147, 255, 161, 0.377);
+    overflow: hidden;
+    box-sizing: border-box;
+    transition: height .2s;
+}
+
+#notifyType:before {
+    display: block;
+    margin-top: 15px;
+}
+
+.active {
+    height: 50px;
+}
+
+.success:before {
+    Content: "URL Copied";
 }

@@ -34,7 +34,7 @@ navigator.mediaDevices
     socket.emit('username', username)
     socket.on('username-back', (username, users) => {
       $('.messages').append(`<li class="message info">You are connected</li>`)
-      users.forEach(user => {
+      users.forEach((user) => {
         const name = user.username
         $('.main__participants_list').append(`<li>${name}</li>`)
       })
@@ -44,7 +44,7 @@ navigator.mediaDevices
       connectToNewUser(userId, stream)
       $('.messages').append(
         `<li class="message info"><user>${username}</user>Has been connected</li>`
-      ) 
+      )
       $('.main__participants_list').append(`<li>${username}</li>`)
       scrollToBottom()
     })
@@ -100,17 +100,15 @@ navigator.mediaDevices
 myPeer.on('open', (id) => {
   socket.emit('join-room', ROOM_ID, id)
 })
-
 const peers = {}
 socket.on('user-disconnected', (userId, username, users) => {
-  if (peers[userId]) peers[userId].close()
+  peers[userId].close()
+  console.log(peers)
   $('.messages').append(
     `<li class="message info"><user>${username}</user>Has been disconnected</li>`
   )
-  // $('.main__participants_popup_container').textContent = ''
   participantsList.innerHTML = ''
-  console.log(users)
-  users.forEach(user => {
+  users.forEach((user) => {
     const name = user.username
     $('.main__participants_list').append(`<li>${name}</li>`)
   })
@@ -203,7 +201,7 @@ const setStopVideo = () => {
   document.querySelector('.main__video_button').innerHTML = html
 }
 
-const setPlayVideo = () => { 
+const setPlayVideo = () => {
   const html = `
   <i class="stop fas fa-video-slash"></i>
     <span>Play Video</span>
@@ -253,10 +251,12 @@ main_theme_button.addEventListener('click', () => {
   localStorage.theme = body.className || 'dark'
 })
 
-// Participants 
+// Participants
 
 const participantsBtn = document.querySelector('.main__participants_button')
-const participantsWindow = document.querySelector('.main__participants_popup_container')
+const participantsWindow = document.querySelector(
+  '.main__participants_popup_container'
+)
 const participantsList = document.querySelector('.main__participants_list')
 participantsList.style.listStyleType = 'decimal'
 
@@ -271,21 +271,37 @@ function openClosePopUp() {
   }
 }
 
-
 // Emoji
 
 const input = document.getElementById('chat_message')
 const emojiBtn = document.querySelector('.main__message_emoji_btn')
-    let picker = new EmojiButton({
-    position : 'top',
-    autoHide: false,
-    })
+let picker = new EmojiButton({
+  position: 'top',
+  autoHide: false,
+})
 
-    picker.on('emoji', function(emoji){
-        input.value += emoji
-        input.focus()
-    })
+picker.on('emoji', function (emoji) {
+  input.value += emoji
+  input.focus()
+})
 
-    emojiBtn.addEventListener('click', function(){
-        picker.pickerVisible ? picker.hidePicker() : picker.showPicker(input)
-    })
+emojiBtn.addEventListener('click', function () {
+  picker.pickerVisible ? picker.hidePicker() : picker.showPicker(input)
+})
+
+// Share Link
+
+function copyToClipboard(text) {
+  var inputc = document.body.appendChild(document.createElement('input'))
+  inputc.value = window.location.href
+  inputc.focus()
+  inputc.select()
+  document.execCommand('copy')
+  inputc.parentNode.removeChild(inputc)
+  $('.notify').toggleClass('active')
+  $('#notifyType').toggleClass('success')
+  setTimeout(function () {
+    $('.notify').removeClass('active')
+    $('#notifyType').removeClass('success')
+  }, 1500)
+}
