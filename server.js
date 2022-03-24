@@ -24,7 +24,7 @@ app.get('/:room', (req, res) => {
   res.render('room', { roomId: req.params.room })
 })
 
-function user(userId, username) {
+function User(userId, username) {
   this.userId = userId
   this.username = username
 }
@@ -34,17 +34,14 @@ const users = []
 io.on('connection', (socket) => {
   socket.on('join-room', (roomId, userId) => {
     socket.on('username', (username) => {
-      users.push(new user(userId, username))
+      users.push(new User(userId, username))
       socket.emit('username-back', username, users)
       socket.join(roomId)
       socket.to(roomId).emit('user-connected', userId, username)
-      // messages
       socket.on('message', (message) => {
-        //send message to the same room
         io.to(roomId).emit('createMessage', message, username)
       })
       socket.on('disconnect', () => {
-        socket.to(roomId).emit('user-disconnected', userId, username, users)
         for (let index = 0; index < users.length; index++) {
           const element = users[index]
           if (element.userId === userId) {
@@ -52,6 +49,7 @@ io.on('connection', (socket) => {
             break
           }
         }
+        socket.to(roomId).emit('user-disconnected', userId, username, users)
       })
     })
   })

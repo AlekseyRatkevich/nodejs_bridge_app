@@ -42,17 +42,17 @@
 
                     <div data-modal-target class="main__controls__button main__participants_button">
                         <i class="fas fa-user-friends"></i>
-                        <span>Participants</span>
+                        <span class="lang" key="participants">Participants</span>
                     </div>
 
                     <div class="main__controls__button main_theme_button">
-                        <i class="fa-solid fa-moon"></i>
-                        <span>Light Theme</span>
+                        <i id="themeIcon" class="fa-solid fa-moon"></i>
+                        <span class="lang" key="theme">Theme</span>
                     </div>
 
                     <div onclick="copyToClipboard()" class="main__controls__button main__share_button">
                         <i class="fa-solid fa-share"></i>
-                        <span>Share Link</span>
+                        <span class="lang" key="share">Share Link</span>
                     </div>
 
                 </div>
@@ -60,26 +60,53 @@
                 <div class="main__controls__block">
 
                     <div onclick="muteUnmute()" class="main__controls__button main__mute_button">
-                        <i class="fa-solid fa-microphone"></i>
-                        <span>Mute</span>
+                        <i id="microIcon" class="fa-solid fa-microphone"></i>
+                        <span class="lang" key="mute">Mute</span>
                     </div>
 
-                    <div onclick="playStop()" class="main__controls__button main__video_button">
-                        <i class="fas fa-video"></i>
-                        <span>Stop Video</span>
+                    <div onclick="playStop(), translate()" class="main__controls__button main__video_button">
+                        <i id="videoIcon" class="fas fa-video"></i>
+                        <span class="lang" key="video">Video</span>
                     </div>
 
                     <div class="main__controls__button main__chat_button">
                         <i class="fas fa-comment-alt"></i>
-                        <span>Chat</span>
+                        <span class="lang" key="chat">Chat</span>
                     </div>
+
+                    <div onclick="openPopUp()" class="main__controls__button main__settings_button">
+                        <i class="fa-solid fa-gear"></i>
+                        <span class="lang" key="settings">Settings</span>
+                    </div>
+
+                    <div class="popup">
+                        <button onclick="closePopUp()" id="close">&times;</button>
+                        <h3 class="lang" key="languageHeader">Settings</h3>
+                        <hr>
+                        <div class="popup_container">
+                            <p class="lang" key="langSetting">Language</p>
+                            <div class="dropdown">
+                                <div class="dropbtn">EN</div>
+                                <div class="dropdown-content">
+                                    <div class="lang_en">
+                                        <a id="en" class="translate" href="#">EN</a>
+                                    </div>
+                                    <div class="lang_ru">
+                                        <a id="ru" class="translate" href="#">RU</a>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div onclick="closePopUp()" id="overlay"></div>
 
                 </div>
 
 
                 <div class="main__controls__block">
                     <div onclick="leaveMeeting()" class="main__controls__button main__leave_meeting">
-                        <span class="leave_meeting">Leave Meeting</span>
+                        <span class="leave_meeting lang" key="leaveMeeting">Leave Meeting</span>
                     </div>
                 </div>
 
@@ -91,7 +118,7 @@
         <div class="main__right">
 
             <div class="main__header">
-                <h6>Chat</h6>
+                <h6 class="lang" key="chatHeader">Chat</h6>
             </div>
 
             <div class="main__chat_window">
@@ -100,7 +127,7 @@
             </div>
 
             <div class="main__message_container">
-                <input id="chat_message" type="text" placeholder="Type message here...">
+                <input id="chat_message" class="lang" key="typeMessage" type="text" placeholder="Type message here...">
                 <i class="fa-solid fa-face-smile main__message_emoji_btn"></i>
             </div>
 

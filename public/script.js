@@ -28,7 +28,6 @@ navigator.mediaDevices
     })
 
     const username = prompt('Please, write your username', 'User')
-
     // createFullscreen()
 
     socket.emit('username', username)
@@ -66,44 +65,14 @@ navigator.mediaDevices
     })
   })
 
-//Fullscreen
-
-// function createFullscreen() {
-//   const mainVideos = document.querySelector('.main__videos')
-//   const fullScreenButton = document.createElement('div')
-//   fullScreenButton.className = 'main__fullcsreen-button'
-//   const fullScreenIcon = `<i class="fa-solid fa-expand"></i>`
-//   fullScreenButton.innerHTML = fullScreenIcon
-//   mainVideos.append(fullScreenButton)
-
-//   fullScreenButton.addEventListener('click', () => {
-//     const compressBtn = `
-//     <i class="fa-solid fa-compress"></i>
-//     `
-//     const fullscreenBtn = `
-//     <i class="fa-solid fa-expand"></i>
-//     `
-//     if (myVideo.style.width == '720px') {
-//       myVideo.style.width = '400px'
-//       myVideo.style.height = '300px'
-//       fullScreenButton.style.marginTop = '270px'
-//       fullScreenButton.innerHTML = fullscreenBtn
-//     } else {
-//       myVideo.style.width = '720px'
-//       myVideo.style.height = '600px'
-//       fullScreenButton.style.marginTop = '570px'
-//       fullScreenButton.innerHTML = compressBtn
-//     }
-//   })
-// }
-
 myPeer.on('open', (id) => {
   socket.emit('join-room', ROOM_ID, id)
 })
+
 const peers = {}
 socket.on('user-disconnected', (userId, username, users) => {
-  peers[userId].close()
-  console.log(peers)
+  if (peers[userId]) peers[userId].close()
+
   $('.messages').append(
     `<li class="message info"><user>${username}</user>Has been disconnected</li>`
   )
@@ -114,19 +83,6 @@ socket.on('user-disconnected', (userId, username, users) => {
   })
 })
 
-const leaveMeeting = () => {
-  const video = document.querySelector('video')
-  const mediaStream = video.srcObject
-  const tracks = mediaStream.getTracks()
-  tracks[0].stop()
-  tracks.forEach((track) => track.stop())
-  window.close()
-  setStopVideo()
-  setMuteButton()
-  $('.messages').append(`<li class="message info">You left the meeting</li>`)
-  scrollToBottom()
-}
-
 function connectToNewUser(userId, stream) {
   const call = myPeer.call(userId, stream)
   const video = document.createElement('video')
@@ -136,8 +92,8 @@ function connectToNewUser(userId, stream) {
   call.on('close', () => {
     video.remove()
   })
-
   peers[userId] = call
+  console.log(peers)
 }
 
 function addVideoStream(video, stream) {
@@ -151,6 +107,21 @@ function addVideoStream(video, stream) {
 const scrollToBottom = () => {
   var d = $('.main__chat_window')
   d.scrollTop(d.prop('scrollHeight'))
+}
+
+// Leave Meeting button
+
+const leaveMeeting = () => {
+  const video = document.querySelector('video')
+  const mediaStream = video.srcObject
+  const tracks = mediaStream.getTracks()
+  tracks[0].stop()
+  tracks.forEach((track) => track.stop())
+  window.close()
+  setStopVideo()
+  setMuteButton()
+  $('.messages').append(`<li class="message info">You left the meeting</li>`)
+  scrollToBottom()
 }
 
 // Mute/Unmute and play/stop video buttons
@@ -177,36 +148,23 @@ const playStop = () => {
   }
 }
 
+const micIcon = document.getElementById('microIcon')
+const videoIcon = document.getElementById('videoIcon')
+
 const setMuteButton = () => {
-  const html = `
-    <i class="fas fa-microphone"></i>
-    <span>Mute</span>
-  `
-  document.querySelector('.main__mute_button').innerHTML = html
+  micIcon.className = 'fa-solid fa-microphone'
 }
 
 const setUnmuteButton = () => {
-  const html = `
-    <i class="unmute fas fa-microphone-slash"></i>
-    <span>Unmute</span>
-  `
-  document.querySelector('.main__mute_button').innerHTML = html
+  micIcon.className = 'unmute fa-solid fa-microphone-slash'
 }
 
 const setStopVideo = () => {
-  const html = `
-    <i class="fas fa-video"></i>
-    <span>Stop Video</span>
-  `
-  document.querySelector('.main__video_button').innerHTML = html
+  videoIcon.className = 'fas fa-video'
 }
 
 const setPlayVideo = () => {
-  const html = `
-  <i class="stop fas fa-video-slash"></i>
-    <span>Play Video</span>
-  `
-  document.querySelector('.main__video_button').innerHTML = html
+  videoIcon.className = 'stop fas fa-video-slash'
 }
 
 // Hide and show chat
@@ -226,18 +184,13 @@ function hideShowChat() {
 
 const main_theme_button = document.querySelector('.main_theme_button')
 const body = document.body
+const themeIcon = document.getElementById('themeIcon')
 
 function toogleThemeBtn() {
   if (body.classList.contains('light')) {
-    main_theme_button.innerHTML = `
-    <i class="fa-solid fa-sun"></i>
-    <span>Night Theme</span>
-    `
+    themeIcon.className = 'fa-solid fa-sun'
   } else {
-    main_theme_button.innerHTML = `
-    <i class="fa-solid fa-moon"></i>
-    <span>Light Theme</span>
-    `
+    themeIcon.className = 'fa-solid fa-moon'
   }
 }
 
@@ -305,3 +258,162 @@ function copyToClipboard(text) {
     $('#notifyType').removeClass('success')
   }, 1500)
 }
+
+//Fullscreen
+
+// function createFullscreen() {
+//   const mainVideos = document.querySelector('.main__videos')
+//   const fullScreenButton = document.createElement('div')
+//   fullScreenButton.className = 'main__fullcsreen-button'
+//   const fullScreenIcon = `<i class="fa-solid fa-expand"></i>`
+//   fullScreenButton.innerHTML = fullScreenIcon
+//   mainVideos.append(fullScreenButton)
+
+//   fullScreenButton.addEventListener('click', () => {
+//     const compressBtn = `
+//     <i class="fa-solid fa-compress"></i>
+//     `
+//     const fullscreenBtn = `
+//     <i class="fa-solid fa-expand"></i>
+//     `
+//     if (myVideo.style.width == '720px') {
+//       myVideo.style.width = '400px'
+//       myVideo.style.height = '300px'
+//       fullScreenButton.style.marginTop = '270px'
+//       fullScreenButton.innerHTML = fullscreenBtn
+//     } else {
+//       myVideo.style.width = '720px'
+//       myVideo.style.height = '600px'
+//       fullScreenButton.style.marginTop = '570px'
+//       fullScreenButton.innerHTML = compressBtn
+//     }
+//   })
+// }
+
+// Settings
+
+const openSettingsBtn = document.querySelector('.main__settings_button')
+const popUpWindow = document.querySelector('.popup')
+const closeSettingsBtn = document.querySelector('#close')
+const overlay = document.getElementById('overlay')
+
+function openPopUp() {
+  popUpWindow.style.visibility = 'visible'
+  popUpWindow.style.opacity = '1'
+  overlay.style.visibility = 'visible'
+  overlay.style.opacity = '1'
+}
+function closePopUp() {
+  popUpWindow.style.visibility = 'hidden'
+  popUpWindow.style.opacity = '0'
+  overlay.style.visibility = 'hidden'
+  overlay.style.opacity = '0'
+}
+
+// Translate
+
+const arrLang = {
+  en: {
+    participants: 'Participants',
+    theme: 'Theme',
+    share: 'Share Link',
+    mute: 'Mute',
+    video: 'Video',
+    chat: 'Chat',
+    settings: 'Settings',
+    leaveMeeting: 'Leave Meeting',
+    chatHeader: 'Chat',
+    languageHeader: 'Settings',
+    langSetting: 'Language',
+  },
+  ru: {
+    participants: 'Участники',
+    theme: 'Тема',
+    share: 'Поделиться',
+    mute: 'Звук',
+    video: 'Видео',
+    chat: 'Чат',
+    settings: 'Настройки',
+    leaveMeeting: 'Покинуть собрание',
+    chatHeader: 'Чат',
+    languageHeader: 'Настройки',
+    langSetting: 'Язык',
+  },
+}
+
+const placeholderEnglish = 'Type message here...'
+const placeholderRussian = 'Введите сообщение...'
+const placeholder = $('#chat_message')
+
+$(function () {
+  $('.translate').click(function () {
+    let lang = $(this).attr('id')
+    saveLocalLang(lang)
+    $('.lang').each(function (index, item) {
+      $(this).text(arrLang[lang][$(this).attr('key')])
+    })
+    checkPlaceholder()
+  })
+})
+
+function checkPlaceholder() {
+  if (placeholder.attr('placeholder') === placeholderEnglish) {
+    placeholder.attr('placeholder', placeholderRussian)
+  } else {
+    placeholder.attr('placeholder', placeholderEnglish)
+  }
+}
+
+document.addEventListener('DOMContentLoaded', getLocalLang)
+
+function saveLocalLang(language) {
+  let langs
+  if (localStorage.getItem('langs') === null) {
+    langs = []
+  } else {
+    langs = JSON.parse(localStorage.getItem('langs'))
+  }
+  langs.push(language)
+  localStorage.setItem('langs', JSON.stringify(langs))
+}
+
+function getLocalLang() {
+  let langs
+  if (localStorage.getItem('langs') === null) {
+    langs = []
+  } else {
+    langs = JSON.parse(localStorage.getItem('langs'))
+  }
+  langs.forEach(function (language) {
+    let lang = langs[langs.length - 1]
+    $('.lang').each(function (index, item) {
+      $(this).text(arrLang[lang][$(this).attr('key')])
+    })
+    if (lang === 'ru') {
+      makeLangRU()
+    } else {
+      makeLangEN()
+    }
+    checkPlaceholder()
+  })
+}
+
+const dropBtn = document.querySelector('.dropbtn')
+const langENbtn = document.querySelector('.lang_en')
+const langRUbtn = document.querySelector('.lang_ru')
+const RUiconHref = "url('http://icons.iconarchive.com/icons/custom-icon-design/flag-3/16/Russia-Flag-icon.png') no-repeat left"
+const ENiconHref = "url('https://icons.iconarchive.com/icons/fatcow/farm-fresh/16/flag-usa-icon.png') no-repeat left"
+
+langRUbtn.addEventListener('click', makeLangRU)
+langENbtn.addEventListener('click', makeLangEN)
+
+function makeLangRU() {
+  dropBtn.style.background = RUiconHref
+  dropBtn.innerHTML = 'RU'
+}
+
+function makeLangEN() {
+  dropBtn.style.background = ENiconHref
+  dropBtn.innerHTML = 'EN'
+}
+

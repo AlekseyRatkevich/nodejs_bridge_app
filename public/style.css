@@ -60,7 +60,6 @@ video {
     border-left: 1px solid var(--var-main-right-border);
     overflow-wrap: anywhere;
     transition: 0.2s;
-    z-index: 2;
 }
 
 .hide_chat {
@@ -97,6 +96,7 @@ video {
 }
 
 .main__controls__button {
+    font-size: 0.87rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -254,7 +254,7 @@ input[type=checkbox] {
 .notify {
     position: absolute;
     top: 0px;
-    width: 100%;
+    width: 80%;
     height: 0;
     box-sizing: border-box;
     color: var(--var-main-controls-fc);
@@ -276,4 +276,131 @@ input[type=checkbox] {
 
 .success:before {
     Content: "URL Copied";
+}
+
+.popup{
+    position: absolute;
+    visibility: hidden;
+    background-color: var(--var-main-controls-bg);
+    border: 1px solid var(--var-main-right-border);
+    width: 350px;
+    padding: 10px 20px;
+    transform: translate(-50%,-50%);
+    border-radius: 5px;
+    text-align: center;
+    top: 45%;
+    left: 50%;
+    opacity: 0;
+    transition: 0.2s;
+    z-index: 3;
+    min-height: 300px;
+}
+
+.popup button{
+    display: block;
+    margin:  0 0 0 auto;
+    background-color: transparent;
+    border-radius: 5px;
+    font-size: 35px;
+    width: 50px;
+    color: var(--var-main-header-fc);
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.popup button:hover {
+    color: var(--var-main-controls-fc);
+}
+
+.popup h3 {
+    margin-top: -40px;
+}
+
+.popup p{
+    font-size: 20px;
+    line-height: 25px;
+    width: 100px;
+}
+
+.popup_container {
+    display: flex;
+    justify-content: space-around;
+}
+
+#overlay {
+    position: absolute;
+    visibility: hidden;
+    width: 100%;
+    height: 100%; 
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.7); 
+    z-index: 2; 
+    cursor: pointer; 
+    transition: 0.2s;
+  }
+
+  .dropbtn {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--var-main-right-bg);
+    width: 90px;
+}
+
+.dropbtn
+{
+  background: url('https://icons.iconarchive.com/icons/fatcow/farm-fresh/16/flag-usa-icon.png') no-repeat left center;
+  padding-left: 25px;
+  width: 40px;
+}
+
+.dropbtn::after {
+    background: rgba(0, 0, 0, 0) url("https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_keyboard_arrow_down_48px-16.png") no-repeat scroll center;
+    content: "";
+    height: 16px;
+    position: absolute;
+    right: -10px;
+    top: 10px;
+    width: 16px;
+}
+
+.lang_en a{
+    background: url('https://icons.iconarchive.com/icons/fatcow/farm-fresh/16/flag-usa-icon.png') no-repeat left;
+}
+
+.lang_ru a{
+    background: url('http://icons.iconarchive.com/icons/custom-icon-design/flag-3/16/Russia-Flag-icon.png') no-repeat left;
+}
+
+.dropdown-content a {
+    color: var(--var-main-header-fc);
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-decoration: none;
+    display: block;
+}
+
+.lang_en, .lang_ru {
+    padding-left: 15px;
+}
+
+.lang_en:hover, .lang_ru:hover {
+    background-color: var(--var-main-controls-hover);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }
