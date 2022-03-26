@@ -81,9 +81,13 @@ function startApp() {
       socket.on('username-back', (username, users) => {
         let containsRu = main.classList.contains('ru')
         if (containsRu == true) {
-          $('.messages').append(`<li class="message info">Вы подключились к комнате</li>`)
+          $('.messages').append(
+            `<li class="message info">Вы подключились к комнате</li>`
+          )
         } else {
-          $('.messages').append(`<li class="message info">You joined the room</li>`)
+          $('.messages').append(
+            `<li class="message info">You joined the room</li>`
+          )
         }
         users.forEach((user) => {
           const name = user.username
@@ -95,9 +99,13 @@ function startApp() {
         connectToNewUser(userId, stream)
         let containsRu = main.classList.contains('ru')
         if (containsRu == true) {
-          $('.messages').append(`<li class="message info"><user>${username}</user>Присоединился</li>`)
+          $('.messages').append(
+            `<li class="message info"><user>${username}</user>Присоединился</li>`
+          )
         } else {
-          $('.messages').append(`<li class="message info"><user>${username}</user>Connected</li>`)
+          $('.messages').append(
+            `<li class="message info"><user>${username}</user>Connected</li>`
+          )
         }
         $('.main__participants_list').append(`<li>${username}</li>`)
         scrollToBottom()
@@ -118,6 +126,8 @@ function startApp() {
         )
         scrollToBottom()
       })
+      $('#change_usernameInput').attr('placeholder', username)
+      changeUsername()
     })
 }
 
@@ -130,9 +140,13 @@ socket.on('user-disconnected', (userId, username, users) => {
   if (peers[userId]) peers[userId].close()
   let containsRu = main.classList.contains('ru')
   if (containsRu == true) {
-    $('.messages').append(`<li class="message info"><user>${username}</user>Отсоединился</li>`)
+    $('.messages').append(
+      `<li class="message info"><user>${username}</user>Отсоединился</li>`
+    )
   } else {
-    $('.messages').append(`<li class="message info"><user>${username}</user>Disconnected</li>`)
+    $('.messages').append(
+      `<li class="message info"><user>${username}</user>Disconnected</li>`
+    )
   }
   participantsList.innerHTML = ''
   users.forEach((user) => {
@@ -382,6 +396,7 @@ const arrLang = {
     chatHeader: 'Chat',
     languageHeader: 'Settings',
     langSetting: 'Language',
+    usernameSetting: 'Username',
   },
   ru: {
     participants: 'Участники',
@@ -395,6 +410,7 @@ const arrLang = {
     chatHeader: 'Чат',
     languageHeader: 'Настройки',
     langSetting: 'Язык',
+    usernameSetting: 'Имя',
   },
 }
 
@@ -477,3 +493,18 @@ function makeLangEN() {
   dropBtn.innerHTML = 'EN'
 }
 
+// Change username
+
+function changeUsername() {
+  let text = $('#change_usernameInput')
+  $('#change_usernameInput').on('keypress', function (e) {
+    if (e.which == 13 && text.val().length !== 0 && text.val() !== ' ') {
+      localStorage.setItem('username', text.val())
+      document.location.reload()
+    }
+  })
+}
+
+$('#change_usernameInput').click(() => {
+  $('.change_usernameInfo').css('opacity', '1')
+})

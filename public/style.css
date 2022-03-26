@@ -284,7 +284,7 @@ input[type=checkbox] {
     background-color: var(--var-main-controls-bg);
     border: 1px solid var(--var-main-right-border);
     width: 350px;
-    padding: 10px 20px;
+    padding: 10px 40px;
     transform: translate(-50%, -50%);
     border-radius: 5px;
     text-align: center;
@@ -323,9 +323,9 @@ input[type=checkbox] {
     width: 100px;
 }
 
-.popup_container {
+.changeLanguage {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .main__username_popup {
@@ -491,4 +491,30 @@ input[type=checkbox] {
     background-color: rgba(0, 0, 0, 0.9);
     z-index: 2;
     transition: 0.2s;
+}
+
+#change_usernameInput {
+    padding: 5px 10px 5px 10px;
+    background-color: transparent;
+    border: 1px solid var(--var-main-right-border);
+    border-radius: 5px;
+    height: 25px;
+    width: 140px;
+    color: var(--var-main-header-fc);
+}
+
+.changeUsername {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.change_usernameInfo {
+    display: flex;
+    justify-content: flex-end;
+    color: rgb(97, 97, 97);
+    font-size: 11px;
+    margin-top: 10px;
+    opacity: 0;
+    transition: 0.2s ease-in-out;
 }

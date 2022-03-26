@@ -84,20 +84,27 @@
                         <h3 class="lang" key="languageHeader">Settings</h3>
                         <hr>
                         <div class="popup_container">
-                            <p class="lang" key="langSetting">Language</p>
-                            <div class="dropdown">
-                                <div class="dropbtn">EN</div>
-                                <div class="dropdown-content">
-                                    <div class="lang_en" onclick="makeLangEN()">
-                                        <a id="en" class="translate" href="#">EN</a>
-                                    </div>
-                                    <div class="lang_ru" onclick="makeLangRU()">
-                                        <a id="ru" class="translate" href="#">RU</a>
-                                    </div>
+                            <div class="changeLanguage">
+                                <p class="lang" key="langSetting">Language</p>
+                                <div class="dropdown">
+                                    <div class="dropbtn">EN</div>
+                                        <div class="dropdown-content">
+                                            <div class="lang_en" onclick="makeLangEN()">
+                                                <a id="en" class="translate" href="#">EN</a>
+                                            </div>
+                                            <div class="lang_ru" onclick="makeLangRU()">
+                                                <a id="ru" class="translate" href="#">RU</a>
+                                            </div>
+                                        </div>
                                 </div>
-                                </div>
+                            </div>    
+                            <div class="changeUsername">
+                                <p class="lang" key="usernameSetting">Username</p>
+                                <input type="text" autocomplete="off" id="change_usernameInput" placeholder="">
                             </div>
+                            <div class="change_usernameInfo">Type your username and click "Enter"</div>
                         </div>
+                    </div>
 
                     <div onclick="closePopUp()" id="overlay"></div>
 
