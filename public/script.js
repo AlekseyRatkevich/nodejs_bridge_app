@@ -6,64 +6,120 @@ const myPeer = new Peer(undefined, {
   port: '3030',
 })
 
-const myVideo = document.createElement('video')
-myVideo.className = 'myvideo'
-myVideo.muted = true
+// Modal Window with username
 
-let myVideoStream
-navigator.mediaDevices
-  .getUserMedia({
-    video: true,
-    audio: true,
-  })
-  .then((stream) => {
-    myVideoStream = stream
-    addVideoStream(myVideo, stream)
-    myPeer.on('call', (call) => {
-      call.answer(stream)
-      const video = document.createElement('video')
-      call.on('stream', (userVideoStream) => {
-        addVideoStream(video, userVideoStream)
+window.addEventListener('load', function () {
+  if (localStorage.getItem('username') === null) {
+    openUsernamePopUp()
+  }
+  setUsernameLocal(localStorage.getItem('username').toString())
+})
+
+const usernamePopUp = document.querySelector('.main__username_popup')
+const usernameOverlay = document.getElementById('usernameOverlay')
+
+function openUsernamePopUp() {
+  usernamePopUp.style.visibility = 'visible'
+  usernamePopUp.style.opacity = '1'
+  usernameOverlay.style.visibility = 'visible'
+  usernameOverlay.style.opacity = '1'
+}
+function closeusernamePopUp() {
+  usernamePopUp.style.visibility = 'hidden'
+  usernamePopUp.style.opacity = '0'
+  usernameOverlay.style.visibility = 'hidden'
+  usernameOverlay.style.opacity = '0'
+}
+
+function getUsername() {
+  const username = document.getElementById('usernameInput').value
+  if (
+    username == null ||
+    username === undefined ||
+    username == '' ||
+    username == ' '
+  ) {
+    alert('Please, write something')
+  } else {
+    closeusernamePopUp()
+  }
+  setUsernameLocal(username)
+}
+
+function setUsernameLocal(username) {
+  localStorage.setItem('username', username)
+  startApp()
+}
+
+var myVideoStream
+
+function startApp() {
+  const myVideo = document.createElement('video')
+  myVideo.className = 'myvideo'
+  myVideo.muted = true
+
+  navigator.mediaDevices
+    .getUserMedia({
+      video: true,
+      audio: true,
+    })
+    .then((stream) => {
+      myVideoStream = stream
+      addVideoStream(myVideo, stream)
+      myPeer.on('call', (call) => {
+        call.answer(stream)
+        const video = document.createElement('video')
+        call.on('stream', (userVideoStream) => {
+          addVideoStream(video, userVideoStream)
+        })
+      })
+
+      const username = localStorage.getItem('username')
+      // createFullscreen()
+
+      socket.emit('username', username)
+      socket.on('username-back', (username, users) => {
+        let containsRu = main.classList.contains('ru')
+        if (containsRu == true) {
+          $('.messages').append(`<li class="message info">Вы подключились к комнате</li>`)
+        } else {
+          $('.messages').append(`<li class="message info">You joined the room</li>`)
+        }
+        users.forEach((user) => {
+          const name = user.username
+          $('.main__participants_list').append(`<li>${name}</li>`)
+        })
+        scrollToBottom()
+      })
+      socket.on('user-connected', (userId, username) => {
+        connectToNewUser(userId, stream)
+        let containsRu = main.classList.contains('ru')
+        if (containsRu == true) {
+          $('.messages').append(`<li class="message info"><user>${username}</user>Присоединился</li>`)
+        } else {
+          $('.messages').append(`<li class="message info"><user>${username}</user>Connected</li>`)
+        }
+        $('.main__participants_list').append(`<li>${username}</li>`)
+        scrollToBottom()
+      })
+      // input value
+      let text = $('#chat_message')
+      // when press enter send message
+      $('html').keydown(function (e) {
+        if (e.which == 13 && text.val().length !== 0) {
+          socket.emit('message', text.val())
+          text.val('')
+          picker.hidePicker()
+        }
+      })
+      socket.on('createMessage', (message, username) => {
+        $('.messages').append(
+          `<li class="message"><user>${username}</user>${message}</li>`
+        )
+        scrollToBottom()
       })
     })
-
-    const username = prompt('Please, write your username', 'User')
-    // createFullscreen()
-
-    socket.emit('username', username)
-    socket.on('username-back', (username, users) => {
-      $('.messages').append(`<li class="message info">You are connected</li>`)
-      users.forEach((user) => {
-        const name = user.username
-        $('.main__participants_list').append(`<li>${name}</li>`)
-      })
-      scrollToBottom()
-    })
-    socket.on('user-connected', (userId, username) => {
-      connectToNewUser(userId, stream)
-      $('.messages').append(
-        `<li class="message info"><user>${username}</user>Has been connected</li>`
-      )
-      $('.main__participants_list').append(`<li>${username}</li>`)
-      scrollToBottom()
-    })
-    // input value
-    let text = $('#chat_message')
-    // when press enter send message
-    $('html').keydown(function (e) {
-      if (e.which == 13 && text.val().length !== 0) {
-        socket.emit('message', text.val())
-        text.val('')
-        picker.hidePicker()
-      }
-    })
-    socket.on('createMessage', (message, username) => {
-      $('.messages').append(
-        `<li class="message"><user>${username}</user>${message}</li>`
-      )
-      scrollToBottom()
-    })
-  })
+}
 
 myPeer.on('open', (id) => {
   socket.emit('join-room', ROOM_ID, id)
@@ -72,10 +128,12 @@ myPeer.on('open', (id) => {
 const peers = {}
 socket.on('user-disconnected', (userId, username, users) => {
   if (peers[userId]) peers[userId].close()
-
-  $('.messages').append(
-    `<li class="message info"><user>${username}</user>Has been disconnected</li>`
-  )
+  let containsRu = main.classList.contains('ru')
+  if (containsRu == true) {
+    $('.messages').append(`<li class="message info"><user>${username}</user>Отсоединился</li>`)
+  } else {
+    $('.messages').append(`<li class="message info"><user>${username}</user>Disconnected</li>`)
+  }
   participantsList.innerHTML = ''
   users.forEach((user) => {
     const name = user.username
@@ -93,7 +151,6 @@ function connectToNewUser(userId, stream) {
     video.remove()
   })
   peers[userId] = call
-  console.log(peers)
 }
 
 function addVideoStream(video, stream) {
@@ -138,7 +195,7 @@ const muteUnmute = () => {
 }
 
 const playStop = () => {
-  let enabled = myVideoStream.getVideoTracks()[0].enabled
+  const enabled = myVideoStream.getVideoTracks()[0].enabled
   if (enabled) {
     myVideoStream.getVideoTracks()[0].enabled = false
     setPlayVideo()
@@ -401,18 +458,21 @@ function getLocalLang() {
 const dropBtn = document.querySelector('.dropbtn')
 const langENbtn = document.querySelector('.lang_en')
 const langRUbtn = document.querySelector('.lang_ru')
-const RUiconHref = "url('http://icons.iconarchive.com/icons/custom-icon-design/flag-3/16/Russia-Flag-icon.png') no-repeat left"
-const ENiconHref = "url('https://icons.iconarchive.com/icons/fatcow/farm-fresh/16/flag-usa-icon.png') no-repeat left"
+const RUiconHref =
+  "url('http://icons.iconarchive.com/icons/custom-icon-design/flag-3/16/Russia-Flag-icon.png') no-repeat left"
+const ENiconHref =
+  "url('https://icons.iconarchive.com/icons/fatcow/farm-fresh/16/flag-usa-icon.png') no-repeat left"
 
-langRUbtn.addEventListener('click', makeLangRU)
-langENbtn.addEventListener('click', makeLangEN)
+const main = document.querySelector('.main')
 
 function makeLangRU() {
+  main.classList.add('ru')
   dropBtn.style.background = RUiconHref
   dropBtn.innerHTML = 'RU'
 }
 
 function makeLangEN() {
+  main.classList.remove('ru')
   dropBtn.style.background = ENiconHref
   dropBtn.innerHTML = 'EN'
 }

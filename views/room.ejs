@@ -64,7 +64,7 @@
                         <span class="lang" key="mute">Mute</span>
                     </div>
 
-                    <div onclick="playStop(), translate()" class="main__controls__button main__video_button">
+                    <div onclick="playStop()" class="main__controls__button main__video_button">
                         <i id="videoIcon" class="fas fa-video"></i>
                         <span class="lang" key="video">Video</span>
                     </div>
@@ -88,10 +88,10 @@
                             <div class="dropdown">
                                 <div class="dropbtn">EN</div>
                                 <div class="dropdown-content">
-                                    <div class="lang_en">
+                                    <div class="lang_en" onclick="makeLangEN()">
                                         <a id="en" class="translate" href="#">EN</a>
                                     </div>
-                                    <div class="lang_ru">
+                                    <div class="lang_ru" onclick="makeLangRU()">
                                         <a id="ru" class="translate" href="#">RU</a>
                                     </div>
                                 </div>
@@ -101,15 +101,26 @@
 
                     <div onclick="closePopUp()" id="overlay"></div>
 
-                </div>
+                    <div class="main__username_popup">
+                        <h3>Welcome to Brigde!</h3><br>
+                        <img src="./bridge_icon.png" alt="Bridge Logo" height="100px" width="100px">
+                        <p>Please, write your username</p>
+                        <span class="main__username_popup_info">You can change it in settings later</span>
+                            <div class="main__username_popup_container">
+                                <input id="usernameInput" type="text" autocomplete="off" value="" placeholder="Type here">
+                            </div>
+                            <div onclick="getUsername()" class="main__username_popup_container_start-btn">Start</div>
+                    </div>
 
+                    <div id="usernameOverlay"></div>
+
+                </div>
 
                 <div class="main__controls__block">
                     <div onclick="leaveMeeting()" class="main__controls__button main__leave_meeting">
                         <span class="leave_meeting lang" key="leaveMeeting">Leave Meeting</span>
                     </div>
                 </div>
-
 
             </div>
 
@@ -127,7 +138,7 @@
             </div>
 
             <div class="main__message_container">
-                <input id="chat_message" class="lang" key="typeMessage" type="text" placeholder="Type message here...">
+                <input id="chat_message" class="lang" key="typeMessage" type="text" autocomplete="off" placeholder="Type message here...">
                 <i class="fa-solid fa-face-smile main__message_emoji_btn"></i>
             </div>
 

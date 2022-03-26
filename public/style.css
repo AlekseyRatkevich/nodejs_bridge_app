@@ -146,7 +146,7 @@ video {
 
 .messages {
     padding: 20px 20px 0 20px;
-    font-size: 1rem;
+    font-size: 0.93rem;
     color: var(--var-main-header-fc);
     list-style: none;
 }
@@ -278,14 +278,14 @@ input[type=checkbox] {
     Content: "URL Copied";
 }
 
-.popup{
+.popup {
     position: absolute;
     visibility: hidden;
     background-color: var(--var-main-controls-bg);
     border: 1px solid var(--var-main-right-border);
     width: 350px;
     padding: 10px 20px;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     border-radius: 5px;
     text-align: center;
     top: 45%;
@@ -296,9 +296,9 @@ input[type=checkbox] {
     min-height: 300px;
 }
 
-.popup button{
+.popup button {
     display: block;
-    margin:  0 0 0 auto;
+    margin: 0 0 0 auto;
     background-color: transparent;
     border-radius: 5px;
     font-size: 35px;
@@ -317,7 +317,7 @@ input[type=checkbox] {
     margin-top: -40px;
 }
 
-.popup p{
+.popup p {
     font-size: 20px;
     line-height: 25px;
     width: 100px;
@@ -328,22 +328,50 @@ input[type=checkbox] {
     justify-content: space-around;
 }
 
+.main__username_popup {
+    position: absolute;
+    /* visibility: hidden; */
+    background-color: var(--var-main-controls-bg);
+    border: 1px solid var(--var-main-right-border);
+    width: 350px;
+    padding: 10px 20px;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    text-align: center;
+    top: 45%;
+    left: 50%;
+    /* opacity: 0; */
+    transition: 0.2s;
+    z-index: 4;
+    min-height: 300px;
+}
+
+.main__username_popup h3 {
+    margin-top: 10px;
+    margin-bottom: -10px;
+}
+
+.main__username_popup img {
+    margin-bottom: 10px;
+}
+
 #overlay {
     position: absolute;
     visibility: hidden;
     width: 100%;
-    height: 100%; 
+    height: 100%;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.7); 
-    z-index: 2; 
-    cursor: pointer; 
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+    cursor: pointer;
     transition: 0.2s;
-  }
+}
 
-  .dropbtn {
+
+.dropbtn {
     padding: 5px;
     cursor: pointer;
 }
@@ -360,11 +388,10 @@ input[type=checkbox] {
     width: 90px;
 }
 
-.dropbtn
-{
-  background: url('https://icons.iconarchive.com/icons/fatcow/farm-fresh/16/flag-usa-icon.png') no-repeat left center;
-  padding-left: 25px;
-  width: 40px;
+.dropbtn {
+    background: url('https://icons.iconarchive.com/icons/fatcow/farm-fresh/16/flag-usa-icon.png') no-repeat left center;
+    padding-left: 25px;
+    width: 40px;
 }
 
 .dropbtn::after {
@@ -377,11 +404,11 @@ input[type=checkbox] {
     width: 16px;
 }
 
-.lang_en a{
+.lang_en a {
     background: url('https://icons.iconarchive.com/icons/fatcow/farm-fresh/16/flag-usa-icon.png') no-repeat left;
 }
 
-.lang_ru a{
+.lang_ru a {
     background: url('http://icons.iconarchive.com/icons/custom-icon-design/flag-3/16/Russia-Flag-icon.png') no-repeat left;
 }
 
@@ -393,14 +420,75 @@ input[type=checkbox] {
     display: block;
 }
 
-.lang_en, .lang_ru {
+.lang_en,
+.lang_ru {
     padding-left: 15px;
 }
 
-.lang_en:hover, .lang_ru:hover {
+.lang_en:hover,
+.lang_ru:hover {
     background-color: var(--var-main-controls-hover);
 }
 
 .dropdown:hover .dropdown-content {
     display: block;
+}
+
+.main__username_popup {
+    visibility: hidden;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    transition: 0.2s ease-in-out;
+    z-index: 5;
+}
+
+.main__username_popup p {
+    margin-bottom: -5px;
+}
+
+.main__username_popup_info {
+    color: rgb(97, 97, 97);
+    font-size: 11px;
+    margin: 10px;
+}
+
+.main__username_popup_container input {
+    padding: 5px 10px 5px 10px;
+    background-color: transparent;
+    border: 1px solid var(--var-main-right-border);
+    border-radius: 5px;
+    color: var(--var-main-header-fc);
+}
+
+.main__username_popup_container_start-btn {
+    text-align: center;
+    font-size: 20px;
+    margin: 15px;
+    color: var(--var-main-header-fc);
+    width: 110px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: #009b15;
+    transition: 0.2s ease-in-out;
+}
+
+.main__username_popup_container_start-btn:hover {
+    background-color: #01c41b;
+}
+
+#usernameOverlay {
+    position: absolute;
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 2;
+    transition: 0.2s;
 }
