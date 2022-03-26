@@ -485,12 +485,14 @@ function makeLangRU() {
   main.classList.add('ru')
   dropBtn.style.background = RUiconHref
   dropBtn.innerHTML = 'RU'
+  $('.change_usernameInfo').html('Введите имя и нажмите "Enter"')
 }
 
 function makeLangEN() {
   main.classList.remove('ru')
   dropBtn.style.background = ENiconHref
   dropBtn.innerHTML = 'EN'
+  $('.change_usernameInfo').html('Type your username and click "Enter"')
 }
 
 // Change username
