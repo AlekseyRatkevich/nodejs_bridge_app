@@ -32,17 +32,24 @@ function User(userId, username) {
 }
 
 const users = []
-const colors = ['Crimson', 'MediumVioletRed', 'Coral', 'Gold', 'Violet', 'YellowGreen', 'LightSeaGreen', 'DarkOrange']
+const colors = [
+  'MediumVioletRed',
+  'Coral',
+  'Gold',
+  'Violet',
+  'YellowGreen',
+  'LightSeaGreen',
+  'DarkOrange',
+]
 
 io.on('connection', (socket) => {
   socket.on('join-room', (roomId, userId) => {
     socket.on('username', (username) => {
-      
       function randomInteger(min, max) {
         let rand = min - 0.5 + Math.random() * (max - min + 1)
         return Math.round(rand)
       }
-      let userColor = colors[`${randomInteger(0, 7)}`]
+      let userColor = colors[`${randomInteger(0, 6)}`]
       users.push(new User(userId, username))
       socket.emit('username-back', username, users)
 
@@ -50,6 +57,9 @@ io.on('connection', (socket) => {
       socket.to(roomId).emit('user-connected', userId, username)
       socket.on('message', (message) => {
         io.to(roomId).emit('createMessage', message, username, userColor)
+      })
+      socket.on('typing', (username, containsRu) => {
+        socket.local.emit('typing', username, containsRu)
       })
       socket.on('disconnect', () => {
         for (let index = 0; index < users.length; index++) {
@@ -64,6 +74,5 @@ io.on('connection', (socket) => {
     })
   })
 })
-
 
 server.listen(PORT)

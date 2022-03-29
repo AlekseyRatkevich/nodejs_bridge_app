@@ -147,6 +147,7 @@ video {
 
 .messages {
     padding: 20px 20px 0 20px;
+    margin-bottom: 0;
     font-size: 0.93rem;
     color: var(--var-main-header-fc);
     list-style: none;
@@ -522,4 +523,10 @@ input[type=checkbox] {
 date {
     color: var(--var-main-chat-ifno-fc);
     font-size: 0.8rem;
+}
+
+.feedback {
+    color: var(--var-main-chat-ifno-fc);
+    font-size: 0.8rem;
+    padding: 5px 20px 0 20px;
 }

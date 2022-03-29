@@ -33,12 +33,12 @@ function closeusernamePopUp() {
 }
 
 function getUsernameOnEnter() {
-    let text = $('#usernameInput')
-    $('#usernameInput').on('keypress', function (e) {
-      if (e.which == 13 && text.val().length !== 0 && text.val() !== ' ') {
-        getUsername()
-      }
-    })
+  let text = $('#usernameInput')
+  $('#usernameInput').on('keypress', function (e) {
+    if (e.which == 13 && text.val().length !== 0 && text.val() !== ' ') {
+      getUsername()
+    }
+  })
 }
 
 function getUsername() {
@@ -87,6 +87,38 @@ function startApp() {
       const username = localStorage.getItem('username')
       // createFullscreen()
 
+      function changeUsername() {
+        let text = $('#change_usernameInput')
+        $('#change_usernameInput').on('keypress', function (e) {
+          if (e.which == 13 && text.val().length !== 0 && text.val() !== ' ') {
+            localStorage.setItem('username', text.val())
+            document.location.reload()
+          }
+        })
+      }
+
+      // Is typing feature
+
+      const chatInput = document.getElementById('chat_message')
+      const feedback = document.getElementById('feedback')
+
+      chatInput.addEventListener('keypress', (e) => {
+        let containsRu = main.classList.contains('ru')
+        if (e.which !== 13) {
+          socket.emit('typing', username, containsRu)
+        }
+      })
+      socket.on('typing', (username, containsRu) => {
+        if (containsRu == true) {
+          feedback.innerHTML = `<p class="feedback"><em>${username} is typing...</em></p>`
+        } else {
+          feedback.innerHTML = `<p class="feedback"><em>${username} печатает...</em></p>`
+        }
+        setTimeout(() => {
+          feedback.innerHTML = ''
+        }, 3000)
+      })
+
       socket.emit('username', username)
       socket.on('username-back', (username, users) => {
         let containsRu = main.classList.contains('ru')
@@ -132,7 +164,7 @@ function startApp() {
       })
 
       socket.on('createMessage', (message, username, userColor) => {
-        const date = new Date
+        const date = new Date()
         const minutes = date.getMinutes()
         function twoDigits(minutes) {
           return ('0' + minutes).slice(-2)
@@ -142,7 +174,9 @@ function startApp() {
           `<li class="message"><date>${currentTime} </date><user style="color: ${userColor}">${username}</user>${message}<br></li>`
         )
         scrollToBottom()
+        feedback.innerHTML = ''
       })
+
       $('#change_usernameInput').attr('placeholder', username)
       changeUsername()
     })
