@@ -1,4 +1,5 @@
 const express = require('express')
+const PORT = process.env.PORT || 3030
 const path = require('path')
 const favicon = require('serve-favicon')
 const app = express()
@@ -31,16 +32,24 @@ function User(userId, username) {
 }
 
 const users = []
+const colors = ['Crimson', 'MediumVioletRed', 'Coral', 'Gold', 'Violet', 'YellowGreen', 'LightSeaGreen', 'DarkOrange']
 
 io.on('connection', (socket) => {
   socket.on('join-room', (roomId, userId) => {
     socket.on('username', (username) => {
+      
+      function randomInteger(min, max) {
+        let rand = min - 0.5 + Math.random() * (max - min + 1)
+        return Math.round(rand)
+      }
+      let userColor = colors[`${randomInteger(0, 7)}`]
       users.push(new User(userId, username))
       socket.emit('username-back', username, users)
+
       socket.join(roomId)
       socket.to(roomId).emit('user-connected', userId, username)
       socket.on('message', (message) => {
-        io.to(roomId).emit('createMessage', message, username)
+        io.to(roomId).emit('createMessage', message, username, userColor)
       })
       socket.on('disconnect', () => {
         for (let index = 0; index < users.length; index++) {
@@ -56,6 +65,5 @@ io.on('connection', (socket) => {
   })
 })
 
-const PORT = process.env.PORT || 3030
 
 server.listen(PORT)

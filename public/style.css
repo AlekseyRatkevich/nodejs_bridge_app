@@ -33,6 +33,7 @@ body {
 }
 
 video {
+    background: var(--var-main-videos-bg);
     transform: scale(-1, 1);
     height: 300px;
     width: 400px;
@@ -163,7 +164,6 @@ video {
 user {
     text-align: center;
     margin-right: 5px;
-    color: var(--var-main-user-fc);
 }
 
 input[type=checkbox] {
@@ -517,4 +517,9 @@ input[type=checkbox] {
     margin-top: 10px;
     opacity: 0;
     transition: 0.2s ease-in-out;
+}
+
+date {
+    color: var(--var-main-chat-ifno-fc);
+    font-size: 0.8rem;
 }

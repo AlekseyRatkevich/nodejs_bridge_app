@@ -11,6 +11,7 @@ const myPeer = new Peer(undefined, {
 window.addEventListener('load', function () {
   if (localStorage.getItem('username') === null) {
     openUsernamePopUp()
+    getUsernameOnEnter()
   }
   setUsernameLocal(localStorage.getItem('username').toString())
 })
@@ -29,6 +30,15 @@ function closeusernamePopUp() {
   usernamePopUp.style.opacity = '0'
   usernameOverlay.style.visibility = 'hidden'
   usernameOverlay.style.opacity = '0'
+}
+
+function getUsernameOnEnter() {
+    let text = $('#usernameInput')
+    $('#usernameInput').on('keypress', function (e) {
+      if (e.which == 13 && text.val().length !== 0 && text.val() !== ' ') {
+        getUsername()
+      }
+    })
 }
 
 function getUsername() {
@@ -120,9 +130,16 @@ function startApp() {
           picker.hidePicker()
         }
       })
-      socket.on('createMessage', (message, username) => {
+
+      socket.on('createMessage', (message, username, userColor) => {
+        const date = new Date
+        const minutes = date.getMinutes()
+        function twoDigits(minutes) {
+          return ('0' + minutes).slice(-2)
+        }
+        const currentTime = date.getHours() + ':' + twoDigits(minutes)
         $('.messages').append(
-          `<li class="message"><user>${username}</user>${message}</li>`
+          `<li class="message"><date>${currentTime} </date><user style="color: ${userColor}">${username}</user>${message}<br></li>`
         )
         scrollToBottom()
       })
