@@ -81,6 +81,12 @@ video {
     justify-content: center;
     align-items: center;
     overflow-y: scroll;
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+}
+
+.main__videos::-webkit-scrollbar {
+    width: 0;
 }
 
 .main__controls {
@@ -130,6 +136,12 @@ video {
 .main__chat_window {
     flex-grow: 1;
     overflow-y: scroll;
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+}
+
+.main__chat_window ::-webkit-scrollbar {
+    width: 0;
 }
 
 .main__message_container {
