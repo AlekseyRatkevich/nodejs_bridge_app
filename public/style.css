@@ -33,7 +33,7 @@ body {
 }
 
 video {
-    background: var(--var-main-videos-bg);
+    background-color: var(--var-main-videos-bg);
     transform: scale(-1, 1);
     height: 300px;
     width: 400px;
@@ -140,7 +140,7 @@ video {
     overflow: -moz-scrollbars-none;
 }
 
-.main__chat_window ::-webkit-scrollbar {
+.main__chat_window::-webkit-scrollbar {
     width: 0;
 }
 

@@ -1,3 +1,13 @@
+import { arrLang } from "./modules/arrLang.js"
+import { copyToClipboard } from "./modules/copyToClipboard.js"
+import { createFullscreen } from "./modules/fullscreen.js"
+import { muteUnmute, playStop } from "./modules/mediaControls.js"
+import { openUsernamePopUp, closeusernamePopUp, getUsernameOnEnter, getUsername } from "./modules/usernamePopup.js"
+import { openClosePopUp } from './modules/participants.js'
+import { openPopUp, closePopUp } from "./modules/openCloseSettings.js"
+import { checkPlaceholder, makeLangRU, makeLangEN, saveLocalLang } from "./modules/translate.js"
+import { changeUsername } from "./modules/changeUsername.js"
+
 const socket = io('/')
 const videoGrid = document.getElementById('video-grid')
 const myPeer = new Peer(undefined, {
@@ -6,8 +16,7 @@ const myPeer = new Peer(undefined, {
   port: '3030',
 })
 
-// Modal Window with username
-
+// Modal window with username
 window.addEventListener('load', function () {
   if (localStorage.getItem('username') === null) {
     openUsernamePopUp()
@@ -16,54 +25,16 @@ window.addEventListener('load', function () {
   setUsernameLocal(localStorage.getItem('username').toString())
 })
 
-const usernamePopUp = document.querySelector('.main__username_popup')
-const usernameOverlay = document.getElementById('usernameOverlay')
+const startBtn = document.querySelector('.main__username_popup_container_start-btn')
+startBtn.addEventListener('click', getUsername)
 
-function openUsernamePopUp() {
-  usernamePopUp.style.visibility = 'visible'
-  usernamePopUp.style.opacity = '1'
-  usernameOverlay.style.visibility = 'visible'
-  usernameOverlay.style.opacity = '1'
-}
-function closeusernamePopUp() {
-  usernamePopUp.style.visibility = 'hidden'
-  usernamePopUp.style.opacity = '0'
-  usernameOverlay.style.visibility = 'hidden'
-  usernameOverlay.style.opacity = '0'
-}
-
-function getUsernameOnEnter() {
-  let text = $('#usernameInput')
-  $('#usernameInput').on('keypress', function (e) {
-    if (e.which == 13 && text.val().length !== 0 && text.val() !== ' ') {
-      getUsername()
-    }
-  })
-}
-
-function getUsername() {
-  const username = document.getElementById('usernameInput').value
-  if (
-    username == null ||
-    username === undefined ||
-    username == '' ||
-    username == ' '
-  ) {
-    alert('Please, write something')
-  } else {
-    closeusernamePopUp()
-  }
-  setUsernameLocal(username)
-}
-
-function setUsernameLocal(username) {
+export function setUsernameLocal(username) {
   localStorage.setItem('username', username)
   startApp()
 }
 
-var myVideoStream
-
-function startApp() {
+export let myVideoStream
+export function startApp() {
   const myVideo = document.createElement('video')
   myVideo.className = 'myvideo'
   myVideo.muted = true
@@ -83,22 +54,9 @@ function startApp() {
           addVideoStream(video, userVideoStream)
         })
       })
-
       const username = localStorage.getItem('username')
       // createFullscreen()
-
-      function changeUsername() {
-        let text = $('#change_usernameInput')
-        $('#change_usernameInput').on('keypress', function (e) {
-          if (e.which == 13 && text.val().length !== 0 && text.val() !== ' ') {
-            localStorage.setItem('username', text.val())
-            document.location.reload()
-          }
-        })
-      }
-
       // Is typing feature
-
       const chatInput = document.getElementById('chat_message')
       const feedback = document.getElementById('feedback')
 
@@ -137,6 +95,7 @@ function startApp() {
         })
         scrollToBottom()
       })
+      //User connected event
       socket.on('user-connected', (userId, username) => {
         connectToNewUser(userId, stream)
         let containsRu = main.classList.contains('ru')
@@ -152,9 +111,7 @@ function startApp() {
         $('.main__participants_list').append(`<li>${username}</li>`)
         scrollToBottom()
       })
-      // input value
       let text = $('#chat_message')
-      // when press enter send message
       $('html').keydown(function (e) {
         if (e.which == 13 && text.val().length !== 0) {
           socket.emit('message', text.val())
@@ -162,10 +119,11 @@ function startApp() {
           picker.hidePicker()
         }
       })
-
+      // Create message event
       socket.on('createMessage', (message, username, userColor) => {
         const date = new Date()
         const minutes = date.getMinutes()
+
         function twoDigits(minutes) {
           return ('0' + minutes).slice(-2)
         }
@@ -186,6 +144,7 @@ myPeer.on('open', (id) => {
   socket.emit('join-room', ROOM_ID, id)
 })
 
+//User disconnected event
 const peers = {}
 socket.on('user-disconnected', (userId, username, users) => {
   if (peers[userId]) peers[userId].close()
@@ -233,7 +192,11 @@ const scrollToBottom = () => {
 
 // Leave Meeting button
 
-const leaveMeeting = () => {
+const leaveMeetingButton = document.querySelector('.main__leave_meeting')
+
+leaveMeetingButton.addEventListener('click', leaveMeeting)
+
+function leaveMeeting() {
   const video = document.querySelector('video')
   const mediaStream = video.srcObject
   const tracks = mediaStream.getTracks()
@@ -247,54 +210,15 @@ const leaveMeeting = () => {
 }
 
 // Mute/Unmute and play/stop video buttons
-
-const muteUnmute = () => {
-  const enabled = myVideoStream.getAudioTracks()[0].enabled
-  if (enabled) {
-    myVideoStream.getAudioTracks()[0].enabled = false
-    setUnmuteButton()
-  } else {
-    setMuteButton()
-    myVideoStream.getAudioTracks()[0].enabled = true
-  }
-}
-
-const playStop = () => {
-  const enabled = myVideoStream.getVideoTracks()[0].enabled
-  if (enabled) {
-    myVideoStream.getVideoTracks()[0].enabled = false
-    setPlayVideo()
-  } else {
-    setStopVideo()
-    myVideoStream.getVideoTracks()[0].enabled = true
-  }
-}
-
-const micIcon = document.getElementById('microIcon')
-const videoIcon = document.getElementById('videoIcon')
-
-const setMuteButton = () => {
-  micIcon.className = 'fa-solid fa-microphone'
-}
-
-const setUnmuteButton = () => {
-  micIcon.className = 'unmute fa-solid fa-microphone-slash'
-}
-
-const setStopVideo = () => {
-  videoIcon.className = 'fas fa-video'
-}
-
-const setPlayVideo = () => {
-  videoIcon.className = 'stop fas fa-video-slash'
-}
+const muteButton = document.querySelector('.main__mute_button')
+muteButton.addEventListener('click', muteUnmute)
+const stopVideoButton = document.querySelector('.main__video_button')
+stopVideoButton.addEventListener('click', playStop)
 
 // Hide and show chat
-
 const chatButton = document.querySelector('.main__chat_button')
 const chat = document.querySelector('.main__right')
 const left = document.querySelector('.main__left')
-
 chatButton.addEventListener('click', hideShowChat)
 
 function hideShowChat() {
@@ -303,12 +227,11 @@ function hideShowChat() {
 }
 
 // Change theme
-
 const main_theme_button = document.querySelector('.main_theme_button')
 const body = document.body
 const themeIcon = document.getElementById('themeIcon')
 
-function toogleThemeBtn() {
+export function toogleThemeBtn() {
   if (body.classList.contains('light')) {
     themeIcon.className = 'fa-solid fa-sun'
   } else {
@@ -327,27 +250,13 @@ main_theme_button.addEventListener('click', () => {
 })
 
 // Participants
-
 const participantsBtn = document.querySelector('.main__participants_button')
-const participantsWindow = document.querySelector(
-  '.main__participants_popup_container'
-)
 const participantsList = document.querySelector('.main__participants_list')
 participantsList.style.listStyleType = 'decimal'
-
 participantsBtn.addEventListener('click', openClosePopUp)
 openClosePopUp()
 
-function openClosePopUp() {
-  if (participantsWindow.style.left == '-250px') {
-    participantsWindow.style.left = '0px'
-  } else {
-    participantsWindow.style.left = '-250px'
-  }
-}
-
 // Emoji
-
 const input = document.getElementById('chat_message')
 const emojiBtn = document.querySelector('.main__message_emoji_btn')
 let picker = new EmojiButton({
@@ -365,109 +274,25 @@ emojiBtn.addEventListener('click', function () {
 })
 
 // Share Link
-
-function copyToClipboard(text) {
-  var inputc = document.body.appendChild(document.createElement('input'))
-  inputc.value = window.location.href
-  inputc.focus()
-  inputc.select()
-  document.execCommand('copy')
-  inputc.parentNode.removeChild(inputc)
-  $('.notify').toggleClass('active')
-  $('#notifyType').toggleClass('success')
-  setTimeout(function () {
-    $('.notify').removeClass('active')
-    $('#notifyType').removeClass('success')
-  }, 1500)
-}
-
-//Fullscreen
-
-// function createFullscreen() {
-//   const mainVideos = document.querySelector('.main__videos')
-//   const fullScreenButton = document.createElement('div')
-//   fullScreenButton.className = 'main__fullcsreen-button'
-//   const fullScreenIcon = `<i class="fa-solid fa-expand"></i>`
-//   fullScreenButton.innerHTML = fullScreenIcon
-//   mainVideos.append(fullScreenButton)
-
-//   fullScreenButton.addEventListener('click', () => {
-//     const compressBtn = `
-//     <i class="fa-solid fa-compress"></i>
-//     `
-//     const fullscreenBtn = `
-//     <i class="fa-solid fa-expand"></i>
-//     `
-//     if (myVideo.style.width == '720px') {
-//       myVideo.style.width = '400px'
-//       myVideo.style.height = '300px'
-//       fullScreenButton.style.marginTop = '270px'
-//       fullScreenButton.innerHTML = fullscreenBtn
-//     } else {
-//       myVideo.style.width = '720px'
-//       myVideo.style.height = '600px'
-//       fullScreenButton.style.marginTop = '570px'
-//       fullScreenButton.innerHTML = compressBtn
-//     }
-//   })
-// }
+const copyToClipboardButton = document.querySelector('.main__share_button')
+copyToClipboardButton.addEventListener('click', copyToClipboard)
 
 // Settings
-
 const openSettingsBtn = document.querySelector('.main__settings_button')
-const popUpWindow = document.querySelector('.popup')
 const closeSettingsBtn = document.querySelector('#close')
 const overlay = document.getElementById('overlay')
-
-function openPopUp() {
-  popUpWindow.style.visibility = 'visible'
-  popUpWindow.style.opacity = '1'
-  overlay.style.visibility = 'visible'
-  overlay.style.opacity = '1'
-}
-function closePopUp() {
-  popUpWindow.style.visibility = 'hidden'
-  popUpWindow.style.opacity = '0'
-  overlay.style.visibility = 'hidden'
-  overlay.style.opacity = '0'
-}
+openSettingsBtn.addEventListener('click', openPopUp)
+closeSettingsBtn.addEventListener('click', closePopUp)
+overlay.addEventListener('click', closePopUp)
 
 // Translate
+export const main = document.querySelector('.main')
+const enBtn = document.querySelector('.lang_en')
+const ruBtn = document.querySelector('.lang_ru')
+document.addEventListener('DOMContentLoaded', getLocalLang)
 
-const arrLang = {
-  en: {
-    participants: 'Participants',
-    theme: 'Theme',
-    share: 'Share Link',
-    mute: 'Mute',
-    video: 'Video',
-    chat: 'Chat',
-    settings: 'Settings',
-    leaveMeeting: 'Leave Meeting',
-    chatHeader: 'Chat',
-    languageHeader: 'Settings',
-    langSetting: 'Language',
-    usernameSetting: 'Username',
-  },
-  ru: {
-    participants: 'Участники',
-    theme: 'Тема',
-    share: 'Поделиться',
-    mute: 'Звук',
-    video: 'Видео',
-    chat: 'Чат',
-    settings: 'Настройки',
-    leaveMeeting: 'Покинуть собрание',
-    chatHeader: 'Чат',
-    languageHeader: 'Настройки',
-    langSetting: 'Язык',
-    usernameSetting: 'Имя',
-  },
-}
-
-const placeholderEnglish = 'Type message here...'
-const placeholderRussian = 'Введите сообщение...'
-const placeholder = $('#chat_message')
+enBtn.addEventListener('click', makeLangEN)
+ruBtn.addEventListener('click', makeLangRU)
 
 $(function () {
   $('.translate').click(function () {
@@ -479,27 +304,6 @@ $(function () {
     checkPlaceholder()
   })
 })
-
-function checkPlaceholder() {
-  if (placeholder.attr('placeholder') === placeholderEnglish) {
-    placeholder.attr('placeholder', placeholderRussian)
-  } else {
-    placeholder.attr('placeholder', placeholderEnglish)
-  }
-}
-
-document.addEventListener('DOMContentLoaded', getLocalLang)
-
-function saveLocalLang(language) {
-  let langs
-  if (localStorage.getItem('langs') === null) {
-    langs = []
-  } else {
-    langs = JSON.parse(localStorage.getItem('langs'))
-  }
-  langs.push(language)
-  localStorage.setItem('langs', JSON.stringify(langs))
-}
 
 function getLocalLang() {
   let langs
@@ -522,42 +326,7 @@ function getLocalLang() {
   })
 }
 
-const dropBtn = document.querySelector('.dropbtn')
-const langENbtn = document.querySelector('.lang_en')
-const langRUbtn = document.querySelector('.lang_ru')
-const RUiconHref =
-  "url('http://icons.iconarchive.com/icons/custom-icon-design/flag-3/16/Russia-Flag-icon.png') no-repeat left"
-const ENiconHref =
-  "url('https://icons.iconarchive.com/icons/fatcow/farm-fresh/16/flag-usa-icon.png') no-repeat left"
-
-const main = document.querySelector('.main')
-
-function makeLangRU() {
-  main.classList.add('ru')
-  dropBtn.style.background = RUiconHref
-  dropBtn.innerHTML = 'RU'
-  $('.change_usernameInfo').html('Введите имя и нажмите "Enter"')
-}
-
-function makeLangEN() {
-  main.classList.remove('ru')
-  dropBtn.style.background = ENiconHref
-  dropBtn.innerHTML = 'EN'
-  $('.change_usernameInfo').html('Type your username and click "Enter"')
-}
-
 // Change username
-
-function changeUsername() {
-  let text = $('#change_usernameInput')
-  $('#change_usernameInput').on('keypress', function (e) {
-    if (e.which == 13 && text.val().length !== 0 && text.val() !== ' ') {
-      localStorage.setItem('username', text.val())
-      document.location.reload()
-    }
-  })
-}
-
 $('#change_usernameInput').click(() => {
   $('.change_usernameInfo').css('opacity', '1')
 })

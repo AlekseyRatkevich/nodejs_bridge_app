@@ -6,11 +6,15 @@ const app = express()
 app.use(express.static('public'))
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
-const { ExpressPeerServer } = require('peer')
+const {
+  ExpressPeerServer
+} = require('peer')
 const peerServer = ExpressPeerServer(server, {
   debug: true,
 })
-const { v4: uuidV4 } = require('uuid')
+const {
+  v4: uuidV4
+} = require('uuid')
 
 app.use('/peerjs', peerServer)
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
@@ -23,7 +27,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/:room', (req, res) => {
-  res.render('room', { roomId: req.params.room })
+  res.render('room', {
+    roomId: req.params.room
+  })
 })
 
 function User(userId, username) {
@@ -52,7 +58,6 @@ io.on('connection', (socket) => {
       let userColor = colors[`${randomInteger(0, 6)}`]
       users.push(new User(userId, username))
       socket.emit('username-back', username, users)
-
       socket.join(roomId)
       socket.to(roomId).emit('user-connected', userId, username)
       socket.on('message', (message) => {
